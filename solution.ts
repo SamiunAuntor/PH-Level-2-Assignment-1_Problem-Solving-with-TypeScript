@@ -11,6 +11,7 @@ function formatValue(value: string | number | boolean): string | number | boolea
     return !value;
 }
 
+
 function getLength(value: string | any[]): number {
 
     if (typeof value === 'string') {
@@ -23,6 +24,23 @@ function getLength(value: string | any[]): number {
 
     return 0;
 }
+
+
+class Person {
+    name: string;
+    age: number;
+
+    constructor(name: string, age: number) {
+        this.name = name;
+        this.age = age;
+    }
+
+    getDetails(): string {
+        return `Name: ${this.name}, Age: ${this.age}`;
+    }
+}
+
+
 
 
 
