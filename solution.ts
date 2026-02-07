@@ -82,3 +82,25 @@ function printBookDetails(book: Book): void {
     );
 }
 
+
+
+function getUniqueValues<T extends string | number>(array1: T[], array2: T[]): T[] {
+    const result: T[] = [];
+
+    for (let i = 0; i < array1.length; i++) {
+        if (!result.includes(array1[i])) {
+            result.push(array1[i]);
+        }
+    }
+
+    for (let j = 0; j < array2.length; j++) {
+        if (!result.includes(array2[j])) {
+            result.push(array2[j]);
+        }
+    }
+
+    return result;
+}
+
+
+
