@@ -255,6 +255,267 @@ console.log(calculateTotalPrice(products));
 4. What is the use of `enums` in TypeScript? Provide an example of a numeric and string enum.
 5. Provide an example of using **union** and **intersection** types in TypeScript.
 
+---
+
+### উত্তরসমূহ (Answers in Bangla):
+
+#### ১. TypeScript-এ interface এবং type-এর মধ্যে পার্থক্য কী?
+
+TypeScript-এ `interface` এবং `type` দুটোই object-এর structure define করতে ব্যবহৃত হয়, কিন্তু তাদের মধ্যে কিছু গুরুত্বপূর্ণ পার্থক্য রয়েছে :
+
+**Interface-এর বৈশিষ্ট্য:**
+- Interface শুধুমাত্র object shape define করতে পারে
+- Interface-কে extend এবং merge করা যায়
+- Interface class-এর সাথে implement করা যায়
+- Interface runtime-এ কোনো code generate করে না
+
+**Type-এর বৈশিষ্ট্য:**
+- Type শুধু object নয়, primitive types, unions, intersections, tuples ইত্যাদিও define করতে পারে
+- Type-কে extend করা যায় কিন্তু merge করা যায় না
+- Type alias হিসেবে কাজ করে
+
+**উদাহরণ:**
+```typescript
+// Interface
+interface User {
+  name: string;
+  age: number;
+}
+
+// Interface merging
+interface User {
+  email: string;
+}
+
+// Type
+type Status = 'active' | 'inactive';
+type ID = string | number;
+
+// Type alias
+type Point = {
+  x: number;
+  y: number;
+};
+```
+
+#### ২. TypeScript-এ `keyof` keyword-এর ব্যবহার কী? একটি উদাহরণ দিন।
+
+`keyof` keyword TypeScript-এর একটি powerful feature যা একটি object type-এর সব key-গুলোকে union type হিসেবে return করে। এটি type safety বাড়াতে এবং dynamic property access করতে সাহায্য করে।
+
+**ব্যবহার:**
+- Object-এর key-গুলো type হিসেবে পাওয়া যায়
+- Generic type constraint হিসেবে কাজ করে
+- Type-safe property access নিশ্চিত করে
+
+**উদাহরণ:**
+```typescript
+interface Person {
+  name: string;
+  age: number;
+  email: string;
+}
+
+// keyof Person = "name" | "age" | "email"
+type PersonKeys = keyof Person;
+
+// শুধুমাত্র Person-এর valid key accept করে
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const person: Person = {
+  name: "রাকিব",
+  age: 25,
+  email: "rakib@example.com"
+};
+
+// Valid
+const name = getProperty(person, "name");
+
+// Valid
+const age = getProperty(person, "age");
+
+// Invalid
+// const address = getProperty(person, "address");
+```
+
+#### ৩. TypeScript-এ `any`, `unknown`, এবং `never` type-এর মধ্যে পার্থক্য ব্যাখ্যা করুন।
+
+এই তিনটি type TypeScript-এর special type যা বিভিন্ন পরিস্থিতিতে ব্যবহৃত হয়:
+
+**`any` type:**
+- সবচেয়ে flexible type, কোনো type checking নেই
+- যেকোনো value assign করা যায় এবং যেকোনো operation করা যায়
+- Type safety হারিয়ে যায়
+
+**`unknown` type:**
+- Type-safe version of `any`
+- যেকোনো value assign করা যায় কিন্তু ব্যবহারের আগে type checking করতে হয়
+- API response বা user input-এর জন্য ideal
+
+**`never` type:**
+- এমন value represent করে যা কখনো occur হবে না
+- Function যা কখনো return করে না
+
+
+**উদাহরণ:**
+```typescript
+// any - কোনো type checking নেই
+let value1: any = "hello";
+value1 = 42;
+value1.foo.bar;
+
+// unknown - type checking প্রয়োজন
+let value2: unknown = "hello";
+// value2.toUpperCase(); // Error
+if (typeof value2 === "string") {
+  value2.toUpperCase(); // OK
+}
+
+// never - কখনো value থাকবে না
+function throwError(message: string): never {
+  throw new Error(message);
+}
+
+function infiniteLoop(): never {
+  while (true) {
+    // কখনো return হবে না
+  }
+}
+```
+
+#### ৪. TypeScript-এ `enum`-এর ব্যবহার কী? একটি numeric এবং string enum-এর উদাহরণ দিন।
+
+`enum` (enumeration) TypeScript-এর একটি feature যা related constant values-এর একটি named set define করতে ব্যবহৃত হয়। এটি code readability এবং maintainability বাড়ায়।
+
+**Enum-এর ব্যবহার:**
+- Related constant values group করা
+- Magic numbers/strings avoid করা
+- Type safety নিশ্চিত করা
+- Code readability বাড়ানো
+
+**Numeric Enum:**
+- Default enum type
+- প্রথম value 0 থেকে শুরু হয় (বা manually assign করা যায়)
+- পরের value-গুলো automatically increment হয়
+
+**String Enum:**
+- প্রতিটি value একটি string
+- আরও readable এবং meaningful
+- JSON serialization-এ ভালো
+
+**উদাহরণ:**
+```typescript
+// Numeric Enum
+enum Direction {
+  North,    // 0
+  East,     // 1
+  South,    // 2
+  West      // 3
+}
+
+// Numeric Enum with custom values
+enum StatusCode {
+  OK = 200,
+  NotFound = 404,
+  ServerError = 500
+}
+
+// String Enum
+enum UserRole {
+  Admin = "ADMIN",
+  User = "USER",
+  Guest = "GUEST"
+}
+
+// ব্যবহার
+let currentDirection: Direction = Direction.North;
+console.log(currentDirection); // 0
+
+let userRole: UserRole = UserRole.Admin;
+console.log(userRole); // "ADMIN"
+
+// Function-এ ব্যবহার
+function checkAccess(role: UserRole): boolean {
+  return role === UserRole.Admin;
+}
+
+checkAccess(UserRole.Admin); // true
+checkAccess(UserRole.User);  // false
+```
+
+#### ৫. TypeScript-এ **union** এবং **intersection** type-এর ব্যবহারের উদাহরণ দিন।
+
+**Union Type (`|`):**
+- একটি value একাধিক type-এর মধ্যে যেকোনো একটি হতে পারে
+- "OR" logic represent করে
+- Type narrowing প্রয়োজন
+
+**Intersection Type (`&`):**
+- একটি value সব type-এর property combine করে
+- "AND" logic represent করে
+- Multiple interface/type merge করতে ব্যবহৃত হয়
+
+**উদাহরণ:**
+```typescript
+// Union Type
+type ID = string | number;
+
+function processID(id: ID) {
+  if (typeof id === "string") {
+    console.log(id.toUpperCase()); // string method
+  } else {
+    console.log(id.toFixed(2)); // number method
+  }
+}
+
+processID("abc123"); // OK
+processID(12345);    // OK
+
+// Union Type with multiple types
+type Status = "loading" | "success" | "error";
+type Result = string | number | boolean;
+
+// Intersection Type
+interface Person {
+  name: string;
+  age: number;
+}
+
+interface Employee {
+  employeeId: string;
+  department: string;
+}
+
+// Intersection - Person এবং Employee-এর সব property থাকবে
+type EmployeePerson = Person & Employee;
+
+const employee: EmployeePerson = {
+  name: "রাকিব",
+  age: 25,
+  employeeId: "EMP001",
+  department: "IT"
+};
+
+// Function return type with Union
+function getValue(): string | null {
+  return Math.random() > 0.5 ? "value" : null;
+}
+
+// Intersection with type aliases
+type A = { a: number };
+type B = { b: string };
+type C = { c: boolean };
+
+type ABC = A & B & C; // { a: number, b: string, c: boolean }
+
+const obj: ABC = {
+  a: 1,
+  b: "hello",
+  c: true
+};
+```
+
 ## ✅ Instructions & Submission Guidelines:
 
 - **Blog:** Write a blog post on **any 2** of the provided topics and include it in this `README.md`.
