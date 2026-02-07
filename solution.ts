@@ -12,6 +12,7 @@ function formatValue(value: string | number | boolean): string | number | boolea
 }
 
 
+
 function getLength(value: string | any[]): number {
 
     if (typeof value === 'string') {
@@ -24,6 +25,7 @@ function getLength(value: string | any[]): number {
 
     return 0;
 }
+
 
 
 class Person {
@@ -41,6 +43,7 @@ class Person {
 }
 
 
+
 type RatedItem = {
     title: string;
     rating: number;
@@ -48,5 +51,18 @@ type RatedItem = {
 
 function filterByRating(items: RatedItem[]): RatedItem[] {
     return items.filter((item) => item.rating >= 4);
+}
+
+
+
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    isActive: boolean;
+};
+
+function filterActiveUsers(users: User[]): User[] {
+    return users.filter((user) => user.isActive);
 }
 
