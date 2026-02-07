@@ -104,3 +104,32 @@ function getUniqueValues<T extends string | number>(array1: T[], array2: T[]): T
 
 
 
+type Product = {
+    name: string;
+    price: number;
+    quantity: number;
+    discount?: number;
+};
+
+function calculateTotalPrice(products: Product[]): number {
+    if (products.length === 0) return 0;
+
+    return products.reduce((total, product) => {
+
+        const basePrice = product.price * product.quantity;
+
+        const discountMultiplier = product.discount ? (100 - product.discount) / 100 : 1;
+
+        const discountedPrice = basePrice * discountMultiplier;
+
+        return total + discountedPrice;
+    }, 0);
+}
+
+const products = [
+    { name: 'Pen', price: 10, quantity: 2 },
+    { name: 'Notebook', price: 25, quantity: 3, discount: 10 },
+    { name: 'Bag', price: 50, quantity: 1, discount: 20 },
+];
+
+
